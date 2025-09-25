@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="csharp_sso_example.api/csharp_sso_example.api.csproj" Id="0bacdaf1-c5d4-44a6-86e0-725a967f9297" />
+  <Project Path="csharp_sso_example.idp/csharp_sso_example.idp.csproj" />
+  <Project Path="csharp_sso_example.oidc/csharp_sso_example.oidc.csproj" Id="48fcfd2c-8f12-4471-9a43-6b1ffc43c420" />
+</Solution>

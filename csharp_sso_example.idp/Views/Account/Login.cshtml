@@ -1,0 +1,22 @@
+﻿@using csharp_sso_example.idp.Controllers
+@model LoginVm
+
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Sign in</h2>
+    <form method="post" asp-action="Login">
+        <input type="hidden" asp-for="ReturnUrl" />
+        <div>
+            <label>Username</label>
+            <input asp-for="Username" />
+        </div>
+        <div>
+            <label>Password</label>
+            <input asp-for="Password" type="password" />
+        </div>
+        <button type="submit">Sign in</button>
+    </form>
+    <p>Try alice / Pass123$</p>
+</body>
+</html>
