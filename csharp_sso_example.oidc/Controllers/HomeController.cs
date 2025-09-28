@@ -46,7 +46,7 @@ namespace csharp_sso_example.oidc.Controllers
 
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var resp = await client.GetStringAsync("https://localhost:44310/WeatherForecast"); // API port
+            var resp = await client.GetStringAsync("https://localhost:44310/WeatherForecast");
 
             ViewBag.ApiResponse = resp;
             return View();
