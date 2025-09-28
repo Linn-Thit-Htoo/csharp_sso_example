@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@{
+	var user = Context.User?.Identity;
+}
+<h2>MVC Client B</h2>
+
+@if (user?.IsAuthenticated ?? false)
+{
+	<p>Welcome @User.Identity.Name!</p>
+	<p><a href="/Home/CallApi">Call Protected API</a></p>
+	<form method="post" action="/Home/Logout"><button type="submit">Logout</button></form>
+}
+else
+{
+	<a href="/Home/Login">Login</a>
+}

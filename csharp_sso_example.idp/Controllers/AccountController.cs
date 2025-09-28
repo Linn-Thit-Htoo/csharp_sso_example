@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using csharp_sso_example.idp.Models;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
@@ -33,11 +34,11 @@ namespace csharp_sso_example.idp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginRequestModel vm)
+        public async Task<IActionResult> Login(LoginRequestModel requestModel)
         {
-            if (_users.ValidateCredentials(vm.Username, vm.Password))
+            if (_users.ValidateCredentials(requestModel.Username, requestModel.Password))
             {
-                var user = _users.FindByUsername(vm.Username);
+                var user = _users.FindByUsername(requestModel.Username);
 
                 var claims = new List<Claim>
                 {
@@ -69,13 +70,13 @@ namespace csharp_sso_example.idp.Controllers
                     new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username)
                 );
 
-                if (_interaction.IsValidReturnUrl(vm.ReturnUrl))
-                    return Redirect(vm.ReturnUrl);
+                if (_interaction.IsValidReturnUrl(requestModel.ReturnUrl))
+                    return Redirect(requestModel.ReturnUrl);
                 return Redirect("~/");
             }
 
             ModelState.AddModelError("", "Invalid credentials");
-            return View(vm);
+            return View(requestModel);
         }
 
         [HttpGet]
@@ -88,12 +89,5 @@ namespace csharp_sso_example.idp.Controllers
 
             return Redirect("~/");
         }
-    }
-
-    public class LoginRequestModel
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string ReturnUrl { get; set; }
     }
 }

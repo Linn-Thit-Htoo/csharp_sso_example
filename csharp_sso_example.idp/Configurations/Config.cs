@@ -46,6 +46,27 @@ namespace csharp_sso_example.idp.Configurations
                     AllowOfflineAccess = true,
                     AlwaysIncludeUserClaimsInIdToken = false,
                 },
+                new Client
+                {
+                    ClientId = "serviceB",
+                    ClientName = "MVC Client",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = true,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    RedirectUris = { "https://localhost:44300/signin-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "api1",
+                    },
+                    AllowOfflineAccess = true,
+                    AlwaysIncludeUserClaimsInIdToken = false,
+                },
             };
     }
 }
