@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -6,11 +11,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace csharp_sso_example.serviceB
 {
@@ -29,27 +29,31 @@ namespace csharp_sso_example.serviceB
 
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "oidc";
-            })
-            .AddCookie()
-            .AddOpenIdConnect("oidc", options =>
-            {
-                options.Authority = "https://localhost:44398"; // IDP
-                options.RequireHttpsMetadata = false; // dev only
-                options.ClientId = "serviceB";
-                options.ClientSecret = "secret";
-                options.ResponseType = "code";
-                options.SaveTokens = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.Scope.Clear();
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("api1");
-                options.Scope.Add("offline_access");
-            });
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = "oidc";
+                })
+                .AddCookie()
+                .AddOpenIdConnect(
+                    "oidc",
+                    options =>
+                    {
+                        options.Authority = "https://localhost:44398"; // IDP
+                        options.RequireHttpsMetadata = false; // dev only
+                        options.ClientId = "serviceB";
+                        options.ClientSecret = "secret";
+                        options.ResponseType = "code";
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+                        options.Scope.Clear();
+                        options.Scope.Add("openid");
+                        options.Scope.Add("profile");
+                        options.Scope.Add("api1");
+                        options.Scope.Add("offline_access");
+                    }
+                );
 
             services.AddAuthorization();
         }
@@ -78,7 +82,8 @@ namespace csharp_sso_example.serviceB
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
             });
         }
     }
