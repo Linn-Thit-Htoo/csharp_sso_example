@@ -12,51 +12,50 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace csharp_sso_example.serviceB.Controllers
+namespace csharp_sso_example.serviceB.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+
+    public HomeController(ILogger<HomeController> logger)
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [Authorize]
-        public async Task<IActionResult> CallApi()
-        {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var resp = await client.GetStringAsync("https://localhost:44310/WeatherForecast");
-
-            ViewBag.ApiResponse = resp;
-            return View();
-        }
-
-        public IActionResult Login() =>
-            Challenge(new AuthenticationProperties { RedirectUri = "/" });
-
-        public IActionResult Logout() =>
-            SignOut(new AuthenticationProperties { RedirectUri = "/" },
-                    CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+        _logger = logger;
     }
+
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [Authorize]
+    public async Task<IActionResult> CallApi()
+    {
+        var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var resp = await client.GetStringAsync("https://localhost:44310/WeatherForecast");
+
+        ViewBag.ApiResponse = resp;
+        return View();
+    }
+
+    public IActionResult Login() =>
+        Challenge(new AuthenticationProperties { RedirectUri = "/" });
+
+    public IActionResult Logout() =>
+        SignOut(new AuthenticationProperties { RedirectUri = "/" },
+                CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
 }
